@@ -1,0 +1,307 @@
+me: how to we fetch api
+ai: Excellent question, Shrabany 🌷 — this is something every tester and developer needs to understand clearly. Let’s go step by step so you know what “fetching an API” means and how to do it in Python (and even in JavaScript).
+
+🌐 What does “fetch an API” mean?
+
+👉 To fetch an API means to send a request to a web service (the API) and receive a response, usually in JSON format.
+
+Think of it like:
+
+You (the client) ask for data → the API (server) replies with the result.
+
+Example:
+
+You: Hey weather API, what’s the temperature in Perth?
+API: 26°C, partly cloudy 🌤️
+
+⚙️ How to fetch API in Python
+
+The most common library for this is requests.
+
+🪄 Example 1: Simple GET request
+import requests
+
+# Example: Public weather API (replace with a real one)
+url = "https://api.weatherapi.com/v1/current.json"
+params = {
+    "key": "your_api_key_here",
+    "q": "Perth"
+}
+
+response = requests.get(url, params=params)
+
+# Print raw response (JSON text)
+print(response.text)
+
+# Convert to Python dictionary
+data = response.json()
+print(data["location"]["name"], "→", data["current"]["temp_c"], "°C")
+
+
+🔹 requests.get() → Sends a GET request to the API.
+🔹 params → Dictionary that adds query parameters (like ?q=Perth&key=...).
+🔹 response.json() → Converts the JSON data into a Python dictionary.
+
+🪄 Example 2: POST request (sending data)
+
+Sometimes APIs require you to send data to them — for example, to log in or submit info.
+
+import requests
+
+url = "https://example.com/api/login"
+data = {"username": "shrabs", "password": "1234"}
+
+response = requests.post(url, json=data)
+
+print(response.status_code)   # e.g., 200 means success
+print(response.json())        # response data
+
+🧠 Common API methods
+Method	Purpose	Example
+GET	Fetch data	Get weather info
+POST	Send new data	Create a user, submit a form
+PUT	Update data	Update a record
+DELETE	Remove data	Delete a record
+⚙️ How to fetch API in JavaScript (for web apps)
+
+If you’re using JavaScript or building a website, use the built-in fetch() method.
+
+Example:
+fetch("https://api.weatherapi.com/v1/current.json?key=YOUR_KEY&q=Perth")
+  .then(response => response.json())
+  .then(data => {
+    console.log(data.location.name, "→", data.current.temp_c, "°C");
+  })
+  .catch(error => console.error("Error:", error));
+
+🪄 Tip: Testing APIs without coding
+
+If you just want to test APIs (common for QA engineers):
+
+Use Postman or Insomnia (GUI tools).
+
+You can set method = GET/POST, add headers, body, and view responses easily.
+
+Excellent for API testing and automation.
+
+🧩 Summary
+Step	Action
+1️⃣	Get the API endpoint (URL)
+2️⃣	Choose method (GET, POST, etc.)
+3️⃣	Add parameters or body
+4️⃣	Send the request (requests in Python, fetch() in JS, or Postman)
+
+
+me: how to use this api /wttr.in/
+ai: What is wttr.in?
+
+wttr.in is a free, no-signup weather API and terminal service.
+You can simply request:
+
+https://wttr.in/<city>
+
+
+and it gives you weather info in text, JSON, or other formats.
+
+Example:
+
+https://wttr.in/Perth
+
+
+→ returns a weather report for Perth directly in your browser or terminal.
+
+⚙️ Using wttr.in in your browser
+
+Try visiting:
+
+https://wttr.in/Perth
+
+
+You’ll see a beautiful text-based weather report like:
+
+      Weather report: Perth
+
+     ⛅️ +22°C  partly cloudy
+     🌡️  High: +26°C  Low: +15°C
+     💨  Wind: 10 km/h
+
+🧠 Using wttr.in in Python
+
+Here’s how to fetch and process it:
+
+🪄 1️⃣ Simple text format
+import requests
+
+city = "Perth"
+url = f"https://wttr.in/{city}?format=3"  # short format: "City: +22°C"
+response = requests.get(url)
+
+print(response.text)
+
+
+✅ Output:
+
+Perth: 🌦️ +22°C
+
+🪄 2️⃣ Detailed plain text report
+import requests
+
+response = requests.get("https://wttr.in/Perth")
+print(response.text)
+
+
+✅ Output (multi-line ASCII weather art):
+
+Weather report: Perth
+
+      ⛅️  +22°C
+      💧  Humidity: 60%
+      🌬️  Wind: 15 km/h
+
+🪄 3️⃣ JSON format (for coding or data use)
+
+You can get structured JSON data using:
+
+import requests
+
+city = "Perth"
+url = f"https://wttr.in/{city}?format=j1"
+
+response = requests.get(url)
+data = response.json()
+
+# Extract temperature
+current_temp = data["current_condition"][0]["temp_C"]
+desc = data["current_condition"][0]["weatherDesc"][0]["value"]
+
+print(f"Current temperature in {city}: {current_temp}°C ({desc})")
+
+
+✅ Example Output:
+
+Current temperature in Perth: 23°C (Partly cloudy)
+
+
+me: what is json?
+ai: What is JSON?
+
+JSON stands for
+
+JavaScript Object Notation
+
+It’s a lightweight data format used to store and exchange information — especially between servers and applications.
+
+It’s very common in web APIs (like weather APIs, payment APIs, etc.) because:
+
+It’s easy for humans to read, and
+
+Easy for programs to process.
+
+📦 JSON looks like a Python dictionary
+
+Example JSON data:
+
+{
+  "city": "Perth",
+  "temperature": 25,
+  "condition": "Partly Cloudy",
+  "wind": {
+    "speed": 12,
+    "unit": "km/h"
+  }
+}
+
+🧩 Meaning:
+
+"city": "Perth" → key-value pair
+
+"temperature": 25 → number
+
+"condition": "Partly Cloudy" → string
+
+"wind" → another object (nested JSON)
+
+🧮 JSON vs Python Dictionary
+
+They look almost the same!
+
+JSON	Python Dictionary
+Uses {} for objects	Uses {} too
+Keys in double quotes " "	Keys can be ' ' or " "
+No comments allowed	Comments allowed
+All text-based	In-memory object
+
+Example comparison:
+
+JSON
+
+{"name": "Shrabany", "role": "QA Engineer"}
+
+
+Python dict
+
+{"name": "Shrabany", "role": "QA Engineer"}
+
+⚙️ Using JSON in Python
+
+Python has a built-in module called json to handle this.
+
+🔹 Convert JSON string → Python dictionary
+import json
+
+json_text = '{"city": "Perth", "temperature": 25}'
+data = json.loads(json_text)
+
+print(data["city"])         # Output: Perth
+print(data["temperature"])  # Output: 25
+
+🔹 Convert Python dictionary → JSON string
+import json
+
+data = {"city": "Perth", "temperature": 25}
+json_text = json.dumps(data)
+
+print(json_text)
+
+
+✅ Output:
+
+{"city": "Perth", "temperature": 25}
+
+🌐 When you fetch an API
+
+When you call an API, you often get a JSON response:
+
+import requests
+
+url = "https://wttr.in/Perth?format=j1"
+response = requests.get(url)
+data = response.json()   # Converts JSON → Python dict
+
+print(data["current_condition"][0]["temp_C"])
+
+
+✅ Here .json() automatically parses the response text into Python data.
+
+🧩 Summary
+Concept	Meaning
+JSON	Data format (JavaScript Object Notation)
+Used for	Exchanging data between APIs and programs
+Looks like	A Python dictionary {key: value}
+File extension	.json
+Python tools	json.loads(), json.dumps(), or response.json()
+🧠 Real QA Example
+
+When testing APIs:
+
+You send a request to the API.
+
+You get a JSON response.
+
+You check (assert) if values are correct (status, message, etc.).
+
+Example:
+
+assert data["current_condition"][0]["FeelsLikeC"] == "25"
+
+5️⃣	Parse and use the response (usually JSON)
