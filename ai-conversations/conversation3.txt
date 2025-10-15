@@ -1,0 +1,275 @@
+me: what is matplotlib and panda
+ai: Great question again, Shrabany 🌷 — both Matplotlib and Pandas are core tools in data analysis, QA automation, and visualization in Python.
+Let’s go step by step so you understand exactly what they are, how they’re used, and how they can help you — especially as a tester or researcher.
+
+🧮 1️⃣ Pandas
+🔹 What it is
+
+Pandas is a data analysis and manipulation library for Python.
+It helps you work easily with tabular data (rows and columns) — like Excel sheets, CSV files, or database tables.
+
+Think of Pandas as Excel inside Python, but more powerful.
+
+🔹 Key data structures
+
+Pandas mainly has two objects:
+
+Object	Like in Excel	Description
+Series	A single column	One-dimensional data
+DataFrame	A full table	Two-dimensional (rows + columns)
+
+me: what is needed for visualisiang in python?
+ai: Data
+
+You can’t visualize nothing! The first requirement is data.
+
+Data can come from:
+
+CSV files (data.csv)
+
+Excel files (data.xlsx)
+
+Databases (SQL)
+
+APIs (like wttr.in)
+
+Python lists or dictionaries
+
+Example:
+
+sales = [200, 250, 300, 400]      # simple list
+months = ["Jan", "Feb", "Mar", "Apr"]
+
+2️⃣ Libraries / Tools for Visualization
+
+Python has many libraries to create charts, graphs, and plots.
+
+🔹 Most common ones:
+Library	Purpose
+Matplotlib	Basic plotting (line, bar, scatter, pie charts)
+Seaborn	Statistical / beautiful plots, works with Pandas
+Pandas	Can directly create plots from DataFrames
+Plotly	Interactive, web-based visualizations
+Altair / Bokeh	Interactive visualizations for dashboards
+🔹 Example: Matplotlib
+import matplotlib.pyplot as plt
+
+plt.plot([1,2,3,4],[10,20,25,30])
+plt.title("Line Graph")
+plt.xlabel("X-axis")
+plt.ylabel("Y-axis")
+plt.show()
+
+🔹 Example: Pandas + Matplotlib
+import pandas as pd
+import matplotlib.pyplot as plt
+
+data = {"Month": ["Jan","Feb","Mar"], "Sales": [200,250,300]}
+df = pd.DataFrame(data)
+
+df.plot(x="Month", y="Sales", kind="bar", title="Monthly Sales")
+plt.show()
+
+3️⃣ Optional: Data Cleaning / Preparation
+
+  me: i am using api and getting json file
+ai: Ah, perfect, Shrabany 🌷 — since you’re using an API, the process for visualizing data in Python is slightly different than using a CSV or Excel file, but the main steps are very similar. Let me explain clearly.
+
+Steps to visualize data from an API
+1️⃣ Fetch the data from the API
+
+You need to make a request to the API and get the response (usually in JSON format).
+
+Example using the wttr.in weather API:
+
+import requests
+
+city = "Perth"
+url = f"https://wttr.in/{city}?format=j1"  # JSON format
+response = requests.get(url)
+data = response.json()  # Convert JSON → Python dictionary
+
+
+✅ Now data contains all the weather information.
+
+2️⃣ Extract the relevant data
+
+JSON responses usually have nested structures, so you need to pick the values you want to visualize.
+
+Example: Extract hourly temperatures for today:
+
+temps = [int(hour["tempC"]) for hour in data["weather"][0]["hourly"]]
+times = [f"{int(hour['time'])//100:02d}:00" for hour in data["weather"][0]["hourly"]]
+
+
+temps → temperatures for each hour
+
+times → corresponding time labels
+
+3️⃣ Prepare your libraries
+
+You need a library to plot the data:
+
+import matplotlib.pyplot as plt
+
+
+(Optional: use Pandas if you want to make tables or easier plotting)
+
+4️⃣ Visualize the data
+
+Use Matplotlib to create a chart:
+
+plt.plot(times, temps, marker='o', color='blue')
+plt.title(f"Hourly Temperature Forecast for {city}")
+plt.xlabel("Time")
+plt.ylabel("Temperature (°C)")
+plt.grid(True)
+plt.show()
+
+
+✅ Output: A line graph showing temperature changes during the day.
+
+5️⃣ Optional: Use Pandas for easier handling
+import pandas as pd
+
+df = pd.DataFrame({"Time": times, "Temperature": temps})
+df.plot(x="Time", y="Temperature", kind="line", title=f"Hourly Temperature in {city}")
+plt.show()
+
+
+Pandas makes plotting easier when working with structured data.
+
+✅ Summary — Flow from API → Visualization
+
+Fetch data → requests.get()
+
+Parse JSON → response.json()
+
+Extract relevant info → list comprehension or loops
+
+Visualize → Matplotlib (or Pandas/Seaborn/Plotly)
+
+Optional: Clean or prepare data → Pandas
+
+
+
+me: how to create bar chart?
+  ai: Using Matplotlib
+🔹 Example: Simple bar chart
+import matplotlib.pyplot as plt
+
+# Sample data
+fruits = ["Apple", "Banana", "Cherry", "Date"]
+sales = [50, 75, 30, 60]
+
+# Create bar chart
+plt.bar(fruits, sales, color='skyblue')  # x-axis: fruits, y-axis: sales
+plt.title("Fruit Sales")                 # Chart title
+plt.xlabel("Fruit")                      # X-axis label
+plt.ylabel("Units Sold")                 # Y-axis label
+plt.show()
+
+  Using Pandas
+
+If your data is in a DataFrame, creating a bar chart is even simpler.
+
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Create DataFrame
+data = {"Fruit": ["Apple", "Banana", "Cherry", "Date"],
+        "Sales": [50, 75, 30, 60]}
+df = pd.DataFrame(data)
+
+# Bar chart
+df.plot(x="Fruit", y="Sales", kind="bar", color="orange", title="Fruit Sales")
+plt.ylabel("Units Sold")
+plt.show()
+
+
+kind="bar" → vertical bar chart
+
+x → column for x-axis labels
+
+y → column for y-axis values
+
+me: i want to show temperature in bar chart what are the steps to follow?
+ai: Steps to Show Temperature in a Bar Chart
+Step 1️⃣: Import required libraries
+
+You need requests to fetch API data and Matplotlib / Pandas to visualize it.
+
+import requests
+import matplotlib.pyplot as plt
+import pandas as pd   # optional, but easier for data handling
+
+Step 2️⃣: Fetch data from the API
+
+Use wttr.in in JSON format:
+
+city = "Perth"
+url = f"https://wttr.in/{city}?format=j1"
+response = requests.get(url)
+data = response.json()
+
+
+data now contains all weather info for the city.
+
+Step 3️⃣: Extract relevant data
+
+Pick the temperatures and times (hours):
+
+# Extract hourly temperatures for today
+temps = [int(hour["tempC"]) for hour in data["weather"][0]["hourly"]]
+times = [f"{int(hour['time'])//100:02d}:00" for hour in data["weather"][0]["hourly"]]
+
+
+temps → list of temperatures
+
+times → corresponding time labels for x-axis
+
+Step 4️⃣: Prepare data for plotting (optional with Pandas)
+
+Using Pandas can make plotting easier:
+
+df = pd.DataFrame({"Time": times, "Temperature": temps})
+
+Step 5️⃣: Plot the bar chart
+Using Matplotlib directly:
+plt.bar(times, temps, color='skyblue')
+plt.title(f"Hourly Temperature in {city}")
+plt.xlabel("Time")
+plt.ylabel("Temperature (°C)")
+plt.xticks(rotation=45)  # rotate x labels for readability
+plt.grid(True)
+plt.show()
+
+Using Pandas plotting:
+df.plot(x="Time", y="Temperature", kind="bar", color="orange", title=f"Hourly Temperature in {city}")
+plt.ylabel("Temperature (°C)")
+plt.show()
+
+Step 6️⃣: Customize (optional)
+
+Add colors for hot/cold temperatures
+
+Add gridlines for clarity
+
+Rotate x-axis labels if crowded
+
+Highlight max/min temperature with a different color
+
+Example:
+
+colors = ['red' if t > 25 else 'blue' for t in temps]
+plt.bar(times, temps, color=colors)
+plt.show()
+
+✅ Summary of Steps
+Step	Action
+1	Import libraries (requests, matplotlib, pandas)
+2	Fetch data from API (wttr.in)
+3	Extract hourly temperatures and times from JSON
+4	Optional: create Pandas DataFrame
+5	Plot bar chart using Matplotlib or Pandas
+6	Customize colors, labels, title, grid, etc.
